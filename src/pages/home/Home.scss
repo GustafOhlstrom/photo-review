@@ -1,0 +1,27 @@
+@import '../../variables.scss';
+
+#home {
+	width: 50%;
+	max-width: 800px;
+	margin: auto;
+	padding: 1.5rem;
+
+	h1 {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.auth-options {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		
+		a {
+			width: 45%;
+
+			button {
+				width: 100%;
+			}
+		}
+	}
+}
