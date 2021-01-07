@@ -1,0 +1,103 @@
+@import '../../variables.scss';
+
+#navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	height: 70px;
+	padding: 1.5rem;
+	
+	background-color: $bcolor1;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    letter-spacing: 0.15rem;
+    
+    .nav-link {
+        color: $color1;
+        font-size: 1.25rem;
+        line-height: 1.25rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .nav-list {
+        position: absolute;
+        top: 70px;
+        right: 0px;
+
+        height: 0;
+        width: 100%;
+        padding-right: 1.5rem;
+        
+        text-align: right;
+        list-style: none;
+
+        overflow: hidden;
+        transition: height 0.3s ease-out;
+
+        background-color: $bcolor1;
+        box-shadow: 0 6px 5px -5px rgba(0,0,0,.3);
+  
+        .nav-link {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+		
+        .active {
+            color: $themeColor;
+        }
+    }
+
+    .burger-menu div {
+        width: 25px;
+        height: 3px;
+        background-color: $color1;
+        margin: 4px;
+        border-radius: 5px;
+        transition: all 0.2s ease-in;
+    }
+
+    .burger-toggle .line1 {
+        -webkit-transform: rotate(-45deg) translate(-5px, 5px);
+        transform: rotate(-45deg) translate(-5px, 5px);
+    }
+
+    .burger-toggle .line2 {
+        opacity: 0;
+    }
+
+    .burger-toggle .line3 {
+        -webkit-transform: rotate(45deg) translate(-4.5px, -5px);
+        transform: rotate(45deg) translate(-4.5px, -5px);
+    }
+
+    .nav-display {
+        height: 6.5rem;
+    }
+
+
+    @media screen and (min-width: 768px) { 
+        padding: 0 0 0 1rem;
+        
+        .nav-list {
+            position: initial; 
+            display: flex;
+            width: auto;
+            height: auto;
+            box-shadow: none;
+            cursor: pointer;
+    
+            .nav-link {
+                margin: 0 0 0 1rem;
+            }
+        }
+
+        .burger-menu {
+            display: none;
+        }
+    }
+
+}
