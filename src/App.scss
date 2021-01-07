@@ -9,6 +9,43 @@
 
 body {
 	font-family: 'Roboto', 'Montserrat', sans-serif;
-	// background-color:
-	// color:
+	background-color: $bcolor2;
+	color: $color1;
+}
+
+button {
+	padding: 0.5rem 1rem;
+	
+	color: $themeColor;
+	background: #fff;
+	
+	font-family: 'Roboto', 'Montserrat', sans-serif;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1rem;
+
+	border: 1px solid $themeColor;
+	border-radius: 5px;
+	outline: none;
+
+	cursor: pointer;
+
+	&:hover {
+		color: #fff;
+		background: $themeColor;
+	}
+}
+
+input {
+	width: 100%;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+
+	font-family: 'Roboto', 'Montserrat', sans-serif;
+	font-size: 1rem;
+	line-height: 1rem;
+
+	border: 1px solid $themeColor;
+	border-radius: 5px;
+	outline: none;
 }
