@@ -1,0 +1,25 @@
+@import '../../variables.scss';
+
+#galleries {
+	width: 50%;
+	max-width: 800px;
+	margin: auto;
+	padding: 1.5rem;
+
+	h1 {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.gallery {
+		display: inline-block;
+		margin: 1rem;
+		padding: 2rem;
+
+		color: $color1;
+		text-decoration: none;
+
+		border: 1px solid $themeColor;
+		border-radius: 5px;
+	}
+}

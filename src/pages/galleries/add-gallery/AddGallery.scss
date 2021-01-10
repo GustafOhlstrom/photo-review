@@ -1,0 +1,18 @@
+@import '../../../variables.scss';
+
+#add-gallery {
+	margin-bottom: 3rem;
+
+	.error {
+		margin-bottom: 1rem;
+		color: #ce4242;
+		text-align: center;
+	}
+
+	form {
+		button {
+			min-width: 200px;
+			float: right;
+		}
+	}
+}

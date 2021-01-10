@@ -25,12 +25,12 @@ function App() {
 							<Galleries />
 						</Route>
 
-						<Route path='/:Id'>
+						<Route path='/:id'>
 							<Gallery />
 						</Route>
 					</Route>
 
-					<Route path='/gallery/:Id'>
+					<Route path='/gallery/:id'>
 						<Gallery />
 					</Route>
 
