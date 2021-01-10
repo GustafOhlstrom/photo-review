@@ -1,0 +1,28 @@
+@import '../../../variables.scss';
+
+#image-upload {
+	padding: 1rem;
+
+	background-color: $bcolor3;
+	text-align: center;
+	
+	border: 1px dashed #fff;
+	border-radius: 5px;
+
+	ul {
+		list-style-type: none;
+
+		li {
+			margin: 1rem 0;
+		}
+	}
+
+	.progress-bar {
+		background-color: #f1f1f1;
+		
+		.progress-completed {
+			background-color: $themeColor;
+		}
+	}
+	
+}

@@ -1,0 +1,19 @@
+@import '../../variables.scss';
+
+#gallery {
+	width: 50%;
+	max-width: 800px;
+	margin: auto;
+	padding: 1.5rem;
+
+	h1 {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.images {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 1rem auto;
+	}
+}
