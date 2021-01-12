@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import firebase, { db, storage } from '../firebase'
 
-const useImagesUpload = (images, gallery) => {
+const useImagesUpload = (images, gallery, version) => {
 	const [isSuccess, setIsSuccess] = useState(false)
 	const [progress, setProgress] = useState(null)
 	const [error, setError] = useState(null)
@@ -29,6 +29,9 @@ const useImagesUpload = (images, gallery) => {
 		const totalBytes = images.reduce((a, b) => a + (b.size || 0), 0)
 		let bytesTransferred = 0
 
+		// Version, create new if none was provided
+		const updateVersion = version ? version : new Date().getTime()
+
 		// Upload images
 		images.forEach(image => {
 			// Get ref, start image upload and save upload to promises array
@@ -39,16 +42,16 @@ const useImagesUpload = (images, gallery) => {
 			// Track upload progress
 			let imageBytesTransferred = 0
 			uploadTask.on('state_changed', taskSnapshot => {
-				bytesTransferred += taskSnapshot.bytesTransferred - imageBytesTransferred;
+				bytesTransferred += taskSnapshot.bytesTransferred - imageBytesTransferred
 				setProgress(Math.round(((bytesTransferred) / totalBytes) * 100))
-				imageBytesTransferred = taskSnapshot.bytesTransferred;
+				imageBytesTransferred = taskSnapshot.bytesTransferred
 			})
 
 			// Save image information to db after images has been uploaded to storage
 			uploadTask.then(async snapshot => {
 				// Save image information
 				db.collection("galleries").doc(gallery).update({
-					images: firebase.firestore.FieldValue.arrayUnion({
+					[`versions.${updateVersion}`]: firebase.firestore.FieldValue.arrayUnion({
 						name: image.name,
 						owner: user.uid,
 						path: snapshot.ref.fullPath,

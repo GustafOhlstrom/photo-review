@@ -34,6 +34,16 @@ button {
 		color: #fff;
 		background: $themeColor;
 	}
+
+	&:disabled {
+		color: #888888;
+		cursor: not-allowed;
+
+		&:hover {
+			color: #888888;
+			background: #fff;
+		}
+	}
 }
 
 input {
@@ -43,9 +53,14 @@ input {
 
 	font-family: 'Roboto', 'Montserrat', sans-serif;
 	font-size: 1rem;
-	line-height: 1rem;
+	line-height: 1rem !important;
 
 	border: 1px solid $themeColor;
 	border-radius: 5px;
 	outline: none;
+}
+
+.row {
+	display: flex;
+	align-items: center;
 }

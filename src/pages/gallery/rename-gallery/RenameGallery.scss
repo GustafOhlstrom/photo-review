@@ -1,0 +1,26 @@
+@import '../../../variables.scss';
+
+#rename-gallery {
+	display: flex;
+	align-items: center;
+	width: 80%;
+	margin-bottom: 8px;
+	
+	input {
+		height: 100%;
+		margin: 0;
+
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	button {
+		height: 100%;
+		line-height: unset;
+
+		border-left: none;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+
+}

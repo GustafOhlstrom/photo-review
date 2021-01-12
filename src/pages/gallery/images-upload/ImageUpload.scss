@@ -1,6 +1,7 @@
 @import '../../../variables.scss';
 
 #image-upload {
+	margin-bottom: 3rem;
 	padding: 1rem;
 
 	background-color: $bcolor3;
@@ -9,6 +10,8 @@
 	border: 1px dashed #fff;
 	border-radius: 5px;
 
+	cursor: pointer;
+	
 	ul {
 		list-style-type: none;
 

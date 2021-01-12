@@ -42,7 +42,7 @@ function App() {
 						<SignIn />
 					</Route>
 
-					<Route path='/review/:id'>
+					<Route path='/review/:id/:version'>
 						<Review />
 					</Route>
 

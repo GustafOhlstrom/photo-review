@@ -3,9 +3,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import useImagesUpload from '../../../hooks/useImagesUpload'
 import { useDropzone } from 'react-dropzone'
 
-const ImagesUpload = ({ galleryId }) => {
+const ImagesUpload = ({ galleryId, version }) => {
 	const [images, setImages] = useState(null)
-	const { isSuccess, progress, error } = useImagesUpload(images, galleryId)
+	const { isSuccess, progress, error } = useImagesUpload(images, galleryId, version)
 
 	// Clear images after upload is completed or get an error
 	useEffect(() => {
@@ -38,7 +38,7 @@ const ImagesUpload = ({ galleryId }) => {
 					? isDragAccept 
 						? <p>Drop images here!</p> 
 						: <p>File not accepted!</p>
-					: <p>Drag images here or click to select them</p>
+					: <p>Upload images by dragging them here or clicking to select them</p>
 			}
 			
 			{ 	/* Display file names of accepted files to be uploaded */

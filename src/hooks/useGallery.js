@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { db } from '../firebase'
 
 const useGallery = id => {
-	const [name, setName] = useState("");
-	const [images, setImages] = useState([]);
+	const [name, setName] = useState("")
+	const [versions, setVersions] = useState([])
 	const [loading, setLoading] = useState(true)
 
 	// Get images and gallery name from db using gallery id param from current route
@@ -13,16 +13,18 @@ const useGallery = id => {
 			.onSnapshot(doc => {
 				setLoading(true)
 				
-				setImages(doc.data().images || []);
-				setName(doc.data().name);
-
+				if(doc.data()) {
+					setVersions(doc.data().versions || [])
+					setName(doc.data().name);
+				}
+				
 				setLoading(false)
 			});
 
 		return unsubscribe
-	}, [id]);
+	}, [id])
 
-	return { name, images, loading };
+	return { name, versions, loading }
 }
 
 export default useGallery
