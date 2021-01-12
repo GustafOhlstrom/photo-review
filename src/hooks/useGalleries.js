@@ -16,10 +16,10 @@ const useGalleries = () => {
 				
 				setGalleries(tempGalleries)
 				setLoading(false)
-			});
+			})
 			
 		return unsubscribe
-	}, []);
+	}, [])
 
 	return { galleries, loading }
 }

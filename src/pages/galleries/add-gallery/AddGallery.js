@@ -1,41 +1,26 @@
 import './AddGallery.scss'
-import React, { useContext, useRef, useState } from 'react'
-import { AuthContext } from '../../../contexts/AuthContext'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { db } from '../../../firebase'
 import Loader from '../../../components/loader/Loader'
+import useCreateGallery from '../../../hooks/useCreateGallery'
 
 const AddGallery = () => {
 	const nameRef = useRef()
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState(false)
-	
-	const { user } = useContext(AuthContext)
+	const [name, setName] = useState("")
+	const { id, loading, error } = useCreateGallery(name)
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		navigate(`/galleries/${id}`)
+	}, [id])
 
 	const handleSubmit = async e => {
 		e.preventDefault()
 
-		// Gallery names need to be at least 1 character
+		// Trigger useCreateGallery if name is at least 1 character long
 		const name = nameRef.current.value;
-		if (name.length < 1) {
-			return;
-		}
-
-		setLoading(true)
-		setError(false)
-	
-		// Create gallery in galleries collection on db
-		try {
-			const docRef = await db.collection('galleries').add({
-				name,
-				owner: user.uid,
-			})
-			
-			navigate(`/galleries/${docRef.id}`)
-		} catch (e) {
-			setLoading(false)
-			setError(`An error occurred when creating the new gallery: ${e.message}`)
+		if (name.length >= 1) {
+			setName(name)
 		}
 	}
 
