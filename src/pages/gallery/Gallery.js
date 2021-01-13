@@ -39,7 +39,7 @@ const Gallery = () => {
 	useEffect(() => {
 		if(versions) {
 			if(Object.keys(versions).length > 0) {
-				if(version) {
+				if(version && Object.keys(versions).includes(version)) {
 					setImages(versions[version])
 				} else {
 					const versionKey = Object.keys(versions).reduce((a, b) => a > b ? a : b)
@@ -48,6 +48,7 @@ const Gallery = () => {
 				}
 			} else {
 				setVersion(Object.keys(versions)[0])
+				setImages([])
 			}
 		}
 	}, [versions])
