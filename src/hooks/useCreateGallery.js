@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
-import { db } from '../firebase'
+import firebase, { db } from '../firebase'
 
 const useCreateGallery = (name, uploadImages = false, images) => {
 	const [id, setId] = useState('')
@@ -23,31 +23,33 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 		setLoading(true)
 		setError(false)
 		
-		// Create empty gallery if no images are provided
+		// Create gallery, empty if no images are provided
 		try {
-			if(images && uploadImages) {
-				const version = new Date().getTime()
-				const docRef = await db.collection('galleries').add({
-					name,
-					owner: user.uid,
-					review: [],
-					versions: {
-						[version]: images
+			const version = new Date().getTime()
+
+			// Save image information for gallery
+			const docRef = await db.collection('galleries').add({
+				name,
+				owner: user.uid,
+				review: [],
+				versions: {
+					[version]: (images && uploadImages) ? images : []
+				}
+			})
+			setId(docRef.id)
+
+			// Save image location
+			images.forEach(image => {
+				db.collection("images").doc(image.name).set(
+					{
+						locations: firebase.firestore.FieldValue.arrayUnion({ [docRef.id]: version })
+					},
+					{ 
+						merge: true  
 					}
-				})
-				setId(docRef.id)
-			} else {
-				const version = new Date().getTime()
-				const docRef = await db.collection('galleries').add({
-					name,
-					owner: user.uid,
-					review: [],
-					versions: {
-						[version]: []
-					}
-				})
-				setId(docRef.id)
-			}
+				)
+			})
+
 			setIsSuccess(true)
 		} catch (error) {
 			setLoading(false)

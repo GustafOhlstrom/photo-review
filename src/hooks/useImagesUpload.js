@@ -30,7 +30,7 @@ const useImagesUpload = (images, gallery, version) => {
 		let bytesTransferred = 0
 
 		// Version, create new if none was provided
-		const updateVersion = version ? version : new Date().getTime()
+		const updateVersion = version ? +version : new Date().getTime()
 
 		// Upload images
 		images.forEach(image => {
@@ -60,6 +60,16 @@ const useImagesUpload = (images, gallery, version) => {
 						url: await imageRef.getDownloadURL()
 					})
 				})
+
+				// Save image location
+				db.collection("images").doc(image.name).set(
+					{
+						locations: firebase.firestore.FieldValue.arrayUnion({ [gallery]: updateVersion })
+					},
+					{ 
+						merge: true  
+					}
+				)
 			}).catch(error => {
 				setError(`An error occurred and an image could not be uploaded: ${error.code}`)
 			})

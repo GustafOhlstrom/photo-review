@@ -31,6 +31,18 @@ const useSubmitReview = (id, version, images) => {
 				[`versions.${newVersion}`]: images
 			})
 
+			// Save image location
+			images.forEach(image => {
+				db.collection("images").doc(image.name).set(
+					{
+						locations: firebase.firestore.FieldValue.arrayUnion({ [id]: newVersion })
+					},
+					{ 
+						merge: true  
+					}
+				)
+			})
+
 			setIsSuccess(true)
 		} catch (error) {
 			setLoading(false)

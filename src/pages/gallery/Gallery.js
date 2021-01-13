@@ -4,9 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useGallery from '../../hooks/useGallery'
 import ImagesUpload from './images-upload/ImageUpload'
 import Loader from '../../components/loader/Loader'
-import firebase, { db } from '../../firebase'
+import firebase, { db, storage } from '../../firebase'
 import RenameGallery from './rename-gallery/RenameGallery'
-import { ReactComponent as OptionsSvg } from '../../assets/icons/options.svg';
+import { ReactComponent as OptionsSvg } from '../../assets/icons/options.svg'
 import useCreateGallery from '../../hooks/useCreateGallery'
 
 const Gallery = () => {
@@ -31,7 +31,6 @@ const Gallery = () => {
 	const { id: newId, loading: newLoading, error: newError } = useCreateGallery(newGalleryName, true, newGalleryImages)
 
 	useEffect(() => {
-		console.log("newId", newId)
 		if(newId) {
 			navigate(`/galleries/${newId}`)
 		}
@@ -47,7 +46,7 @@ const Gallery = () => {
 				setVersion(Object.keys(versions)[0])
 			}
 		}
-	}, [versions]);
+	}, [versions])
 
 	const onCreateReview = () => {
 		console.log("create review", id, version)
@@ -57,11 +56,11 @@ const Gallery = () => {
 					review: firebase.firestore.FieldValue.arrayUnion(version)
 				})
 				.then(() => {
-					console.log("Review successfully created!");
+					console.log("Review successfully created!")
 					navigate(`/review/${id}/${version}`)
 				}).catch(error => {
-					console.error("Error create review of gallery: ", error);
-				});
+					console.error("Error create review of gallery: ", error)
+				})
 	}
 
 	const onDeleteGallery = () => {
@@ -72,11 +71,15 @@ const Gallery = () => {
 		if (window.confirm(`Delete gallery: ${name} ?`)) {
 			db.collection("galleries").doc(id).delete()
 				.then(() => {
-					console.log("Gallery successfully deleted!");
+					Object.keys(versions).forEach(version => {
+						deleteImageLocationData(versions[version], version)
+					})
+
+					console.log("Gallery successfully deleted!")
 					navigate(`/galleries`)
 				}).catch(error => {
-					console.error("Error removing document: ", error);
-				});
+					console.error("Error removing document: ", error)
+				})
 		} 
 	}
 
@@ -91,10 +94,12 @@ const Gallery = () => {
 					[`versions.${version}`]: firebase.firestore.FieldValue.delete()
 				})
 				.then(() => {
-					console.log("Version successfully deleted!");
+					deleteImageLocationData(images, version)
+
+					console.log("Version successfully deleted!")
 				}).catch(error => {
-					console.error("Error removing document: ", error);
-				});
+					console.error("Error removing document: ", error)
+				})
 		} 
 	}
 
@@ -128,7 +133,44 @@ const Gallery = () => {
 			db.collection("galleries").doc(id).update({
 				[`versions.${version}`]: firebase.firestore.FieldValue.arrayRemove(...selected)
 			})
+
+			deleteImageLocationData(selected, version)
 		}
+	}
+
+	const deleteImageLocationData = (images, version) => {
+		images.forEach(async image => {
+			// Remove image information
+			await db.collection("images").doc(image.name).update({
+				locations: firebase.firestore.FieldValue.arrayRemove({ [id]: +version })
+			})
+
+			db.collection("images").doc(image.name).get()
+				.then(doc => {
+					// Remove image from storage if not used at any other location
+					if(doc.data() && doc.data().locations.length < 1) {
+						// Remove image location document
+						db.collection("images").doc(image.name).delete()
+							.then(() => {
+								console.log("Image remove from images location")
+							}).catch(error => {
+								console.error("Error removing image from images location: ", error)
+							})
+
+
+						// Remove image from storage
+						storage.ref(image.path).delete()
+							.then(() => {
+								console.log("Gallery successfully deleted!")
+							}).catch(error => {
+								console.error("Error removing document: ", error)
+							})
+					}
+				})
+				.catch(error => {
+					console.error("Error: ", error)
+				})
+		})
 	}
 
 	const onCreateGallery = () => {
