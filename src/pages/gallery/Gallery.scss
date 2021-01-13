@@ -1,7 +1,7 @@
 @import '../../variables.scss';
 
 #gallery {
-	max-width: 800px;
+	max-width: 1200px;
 	margin: auto;
 	padding: 1.5rem;
 
@@ -77,10 +77,21 @@
 				height: 24px;
 				width: 24px;
 
+				transform: rotate(0deg);
+				-webkit-transform: rotate(0deg);
+
+				transition: all 0.2s linear;
+
 				&:hover {
 					color: $themeColor;
 				}
+
+				&.spin-option-wheel {
+					transform: rotate(90deg);
+					-webkit-transform: rotate(90deg);
+				}
 			}
+
 			.drop-down-list {
 				top: 32px;
 			}
@@ -214,12 +225,29 @@
 		}
 	}
 
-	@media screen and (min-width: 768px) {
-		
-		.images {
-			grid-template-columns: repeat(4, minmax(150px, 1fr));
+	@media screen and (min-width: 500px) {
+		.images { 
+			grid-template-columns: repeat(2, 1fr);
 			grid-gap: 0.5rem;
 			margin: 0.5rem auto;
+		}
+	}
+
+	@media screen and (min-width: 650px) {
+		.images { 
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media screen and (min-width: 900px) {
+		.images { 
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	@media screen and (min-width: 1200px) {
+		.images { 
+			grid-template-columns: repeat(5, 1fr);
 		}
 	}
 }

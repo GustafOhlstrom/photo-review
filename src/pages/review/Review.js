@@ -1,6 +1,6 @@
 import './Review.scss'
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import useReview from '../../hooks/useReview'
 import Loader from '../../components/loader/Loader'
 import useSubmitReview from '../../hooks/useSubmitReview'
@@ -15,18 +15,6 @@ const Review = () => {
 
 	const [submitedImages, setSubmitedImages] = useState(null)
 	const { isSuccess, loading: createLoading, error: createError } = useSubmitReview(id, version, submitedImages)
-
-	const navigate = useNavigate()
-
-	useEffect(() => {
-		if(isSuccess) {
-			console.log("isSuccess")
-			navigate(`/galleries/${id}`)
-		} else if(error) {
-			console.log("error")
-			navigate(`/`)
-		}
-	}, [isSuccess, error])
 
 	useEffect(() => {
 		if(images && images.length > 0) {
@@ -59,30 +47,57 @@ const Review = () => {
 
 	return (
 		<div id="review">
-			<header>
-				<h1>Review: { name }</h1>
-
-				<p>{ status } / { review.length }</p>
-				<button disabled={ status !== review.length || loading || createLoading } onClick={onSubmitReview}>Submit review</button>
-			</header>
-		
-			{	/* Display all images */
-				loading 
-					? <Loader />
-					: <div className="images">
-						{
-							images.map((image, index) => (
-								<figure className={`${ review[index] === 'liked' && 'liked' } ${ review[index] === 'disliked' && 'disliked' }`} key={image.url} >
-									<img src={image.url} alt={image.name}/>
-									<div className="review-buttons">
-										<ThumbSvg className={`like ${ review[index] === 'liked' && 'liked' } `} onClick={() => onStusChange(image, 'liked')} />
-										<ThumbSvg className={`dislike ${ review[index] === 'disliked' && 'disliked' }`} onClick={() => onStusChange(image, 'disliked')} />
-									</div>
-								</figure>
-							))
+			{
+				isSuccess 
+					? <h1>Review successfully submitted!</h1>
+					: <>
+						<header>
+							<div className="row">
+								<h1>{ name }</h1>
+								<button 
+									disabled={ status !== review.length || loading || createLoading } 
+									title={ (status !== review.length || loading || createLoading) && 'Complete the review first by liking/disliking all images'}
+									onClick={onSubmitReview}
+								>
+									Submit review
+								</button>
+							</div>
+							<div className="row">
+								<h2>Completed: { status } / { review.length }</h2>
+							</div>
+							
+							<p>Like all images you want to keep and dislike the rest.</p>
+							<p>When all images have been marked please submit the review.</p>
+						</header>
+					
+						{	/* Display all images */
+							loading 
+								? <Loader />
+								: <div className="images">
+									{
+										images.map((image, index) => (
+											<figure className={`${ review[index] === 'liked' && 'liked' } ${ review[index] === 'disliked' && 'disliked' }`} key={image.url} >
+												<img src={image.url} alt={image.name}/>
+												<div className="review-buttons">
+													<ThumbSvg 
+														className={`like ${ review[index] === 'liked' && 'liked' } `} 
+														onClick={() => onStusChange(image, 'liked')} 
+														title="like"
+													/>
+													<ThumbSvg 
+														className={`dislike ${ review[index] === 'disliked' && 'disliked' }`} 
+														onClick={() => onStusChange(image, 'disliked')} 
+														title="dislike"
+													/>
+												</div>
+											</figure>
+										))
+									}
+								</div>
 						}
-					</div>
+					</>
 			}
+			
 			
 		</div>
 	)

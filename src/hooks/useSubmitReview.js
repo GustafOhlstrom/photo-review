@@ -25,7 +25,6 @@ const useSubmitReview = (id, version, images) => {
 		// Create empty gallery if no images are provnewVersioned
 		try {
 			const newVersion = new Date().getTime()
-			console.log("version", '' + version, 1610466777058 )
 			await db.collection("galleries").doc(id).update({
 				'review': firebase.firestore.FieldValue.arrayRemove(version.toString()),
 				[`versions.${newVersion}`]: images

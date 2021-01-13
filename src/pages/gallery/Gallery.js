@@ -198,7 +198,7 @@ const Gallery = () => {
 					}
 
 					<div className={`options drop-down ${options && 'drop-down-display'}`} onClick={onToggleOptions}>
-						<div className="drop-down-value">	
+						<div className={`drop-down-value ${options && 'spin-option-wheel'}`}>	
 							<OptionsSvg />
 						</div>
 						

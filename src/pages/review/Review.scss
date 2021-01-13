@@ -1,20 +1,33 @@
 @import '../../variables.scss';
 
 #review {
-	width: 50%;
-	max-width: 800px;
+	max-width: 1200px;
 	margin: auto;
 	padding: 1.5rem;
 
+	h1 {
+		text-align: center;
+	}
+
 	header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		margin-bottom: 3rem;
 
-		margin-bottom: 2rem;
+		.row {
+			justify-content: space-between;
 
-		h1 {
-			text-transform: capitalize;
+			h1 {
+				text-transform: capitalize;
+			}
+
+			h2 {
+				margin: 4px 0 1rem 0;
+				font-size: 1rem;
+				line-height: 1rem;
+			}
+		}
+
+		p {
+			color: #d6d6d6;
 		}
 	}
 
@@ -49,45 +62,76 @@
 
 			.review-buttons {
 				position: absolute;
-				top: calc(100% - 40px);
+				top: calc(100% - 48px);
 				right: 0;
 			}
 
 			.like,
 			.dislike {
-				margin: 0 4px;
+				margin: 8px;
 				fill: #ddd;
 			}
 
 			.like {
+				width: 32px;
+				height: 32px;
+
 				&.liked {
-					fill: green;
+					.st1 {
+						fill: #53c54b;
+					}
 				}
 
 				&:hover {
-					fill: green;
+					.st1 {
+						fill: #53c54b;
+					}
 				}
 			}
 
 			.dislike {
+				width: 32px;
+				height: 32px;
 				transform: scale(-1);
 
 				&.disliked {
-					fill: red;
+					.st1 {
+						fill: #e6123d;
+					}
 				}
 
 				&:hover {
-					fill: red;
+					.st1 {
+						fill: #e6123d;
+					}
 				}
 			}
 		}
 	}
 
-	@media screen and (min-width: 768px) {
-		.images {
-			grid-template-columns: repeat(4, minmax(150px, 1fr));
+	@media screen and (min-width: 500px) {
+		.images { 
+			grid-template-columns: repeat(2, 1fr);
 			grid-gap: 0.5rem;
 			margin: 0.5rem auto;
+		}
+	}
+
+	@media screen and (min-width: 650px) {
+		.images { 
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media screen and (min-width: 900px) {
+		.images { 
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	@media screen and (min-width: 1200px) {
+		.images { 
+			grid-template-columns: repeat(5, 1fr);
 		}
 	}
 }
