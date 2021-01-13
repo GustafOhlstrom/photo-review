@@ -10,9 +10,27 @@
 	}
 
 	form {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		max-width: 600px;
+		margin: auto;
+		
+		input {
+			height: 100%;
+			margin: 0;
+
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
 		button {
-			min-width: 200px;
-			float: right;
+			height: 100%;
+			line-height: unset;
+
+			border-left: none;
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
 		}
 	}
 }

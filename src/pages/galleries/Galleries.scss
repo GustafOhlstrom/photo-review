@@ -1,8 +1,7 @@
 @import '../../variables.scss';
 
 #galleries {
-	width: 50%;
-	max-width: 800px;
+	max-width: 1200px;
 	margin: auto;
 	padding: 1.5rem;
 
@@ -11,15 +10,109 @@
 		text-align: center;
 	}
 
-	.gallery {
-		display: inline-block;
-		margin: 1rem;
-		padding: 2rem;
+	.gallery-grid {
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+		grid-template-rows: auto;
+		grid-gap: 24px;
 
-		color: $color1;
-		text-decoration: none;
+		.gallery {
+			display: block;
+			width: 100%;
+	
+			color: $color1;
+			background-color: $bcolor4;
+			text-decoration: none;
+			text-align: center;
+	
+			box-shadow: 2px 2px 4px 2px $bcolor1;
+			border-radius: 5px;
+			
+			h2 {
+				font-size: 1.5rem;
+				line-height: 1.5rem;
+				text-transform: capitalize;
+				
+			}
+	
+			h3 {
+				color: $themeColor;
+				font-size: 0.9rem;
+				line-height: 0.9rem;
+			}
+	
+			img {
+				width: 100%;
+				height: 200px;;
+				object-fit: cover; 
+				object-position: center;
+	
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+			}
+	
+			header {
+				padding: 1rem 1rem 1rem 1rem;
+	
+				h3 {
+					margin-top: 0.5rem;
+				}
+			}
+	
+			ul {
+				display: flex;
+				align-items: center;
+	
+				margin: 0;
+				list-style-type: none;
+				border-radius: 5px;
+	
+				li {
+					width: 50%;
+					padding: 0 1rem 1rem 1rem;
+					background: $bcolor4;
+	
+					&:first-of-type {
+						border-bottom-left-radius: 5px;
+						// border-right: 1px solid #ccc;
+					}
+	
+					&:last-of-type {
+						border-bottom-right-radius: 5px;
+					}
+	
+					h3 {
+						color: $color1;
+						margin-bottom: 4px;
+					}
+	
+					h4 {
+						color: #dddddd;
+						font-size: 0.8rem;
+						line-height: 0.8rem;
+					}
+				}
+			}
+		}
+	}
 
-		border: 1px solid $themeColor;
-		border-radius: 5px;
+	@media screen and (min-width: 600px) {
+		.gallery-grid { 
+			grid-template-columns: repeat(2, 1fr);
+			grid-gap: 1.5rem;
+			margin: 0.5rem auto;
+		}
+	}
+
+	@media screen and (min-width: 900px) {
+		.gallery-grid { 
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media screen and (min-width: 1200px) {
+		.gallery-grid { 
+			grid-template-columns: repeat(4, 1fr);
+		}
 	}
 }

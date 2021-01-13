@@ -31,11 +31,7 @@ const AddGallery = () => {
 			{ loading
 				? <Loader />
 				: <form onSubmit={handleSubmit}>
-					<div>
-						<label htmlFor="name"></label>
-						<input id="name" type="text" ref={nameRef} placeholder="gallery name"/>
-					</div>
-					
+					<input id="name" type="text" ref={nameRef} placeholder="gallery name"/>
 					<button>Add</button>
 				</form>	
 			}
