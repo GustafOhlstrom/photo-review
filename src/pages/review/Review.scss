@@ -36,76 +36,194 @@
 		grid-template-columns: repeat(1, 1fr);
 		grid-template-rows: auto;
 		grid-gap: 24px;
+	}
 
-		figure {
-			position: relative;
+	figure {
+		position: relative;
+		width: 100%;
+		cursor: pointer;
+
+		&:before {
+			content: "";
+			float: left;
+			padding-top: 100%;
+		}
+
+		img {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0; 
+			width: 100%; 
+			height: 100%;
+			object-fit: cover; 
+			object-position: center;
+		}
+
+		.review-buttons {
+			position: absolute;
+			top: calc(100% - 48px);
+			right: 0;
+		}
+
+		.like,
+		.dislike {
+			margin: 8px 8px 8px 0;
+			fill: #ddd;
+		}
+
+		.like {
+			width: 32px;
+			height: 32px;
+
+			&.liked {
+				.st1 {
+					fill: #53c54b;
+				}
+			}
+
+			&:hover {
+				.st1 {
+					fill: #53c54b;
+				}
+			}
+		}
+
+		.dislike {
+			width: 32px;
+			height: 32px;
+			transform: scale(-1);
+
+			&.disliked {
+				.st1 {
+					fill: #e6123d;
+				}
+			}
+
+			&:hover {
+				.st1 {
+					fill: #e6123d;
+				}
+			}
+		}
+	}
+
+	.lightbox {
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		height: 100%;
+		width: 100%;
+
+		background: rgba(30, 30, 30, 0.98);
+		z-index: 5;
+
+		.close {
+			position: absolute;
+			top: 32px;
+			right: 32px;
+
+			div {
+				width: 32px;
+				height: 3px;
+				background-color: #fff;
+				margin: 4px;
+				border-radius: 5px;
+			}
+			
+			.line1 {
+				-webkit-transform: rotate(-45deg) translate(-5px, 5px);
+				transform: rotate(-45deg) translate(-5px, 5px);
+			}
+		
+			.line2 {
+				-webkit-transform: rotate(45deg) translate(-4.5px, -5px);
+				transform: rotate(45deg) translate(-0.5px, -0px);
+			}
+
+			&:hover {
+				div {
+					background-color: $themeColor;
+				}
+			}
+		}
+		
+		img {
+			width: auto;
+			height: auto;
+			max-height: 80vh;
+			max-width: 80vw;
+			margin: auto;
+		}
+
+		.previous,
+		.next {
+			position: absolute;
+			top: 50%;
+			width: 10vw;
+			padding: 1rem 0;
+			margin: auto;
+
+			.arrow {
+				border: solid #fff;
+				border-width: 0 3px 3px 0;
+				width: 3px;
+				padding: 12px;
+				margin: auto;
+			}
+
+			&:hover {
+				.arrow {
+					border-color: $themeColor;
+				}
+			}
+		}
+
+		.previous {
+			left: 0;
+			transform: translate(6px, -50%);
+
+			.arrow {
+				transform: rotate(135deg);
+				-webkit-transform: rotate(135deg);
+			}
+		}
+
+		.next {
+			right: 0;
+			transform: translate(-6px, -50%);
+
+			.arrow {
+				transform: rotate(-45deg);
+				-webkit-transform: rotate(-45deg);
+			}
+		}
+
+		.review-buttons {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			height: 10vh;
 			width: 100%;
-			cursor: pointer;
+			transform: translate(0, -50%);
+		}
 
-			&:before {
-				content: "";
-				float: left;
-				padding-top: 100%;
-			}
+		.like {
+			width: 48px;
+			height: 48px;
+		}
 
-			img {
-				position: absolute;
-				top: 0;
-				bottom: 0;
-				left: 0;
-				right: 0; 
-				width: 100%; 
-				height: 100%;
-				object-fit: cover; 
-				object-position: center;
-			}
-
-			.review-buttons {
-				position: absolute;
-				top: calc(100% - 48px);
-				right: 0;
-			}
-
-			.like,
-			.dislike {
-				margin: 8px;
-				fill: #ddd;
-			}
-
-			.like {
-				width: 32px;
-				height: 32px;
-
-				&.liked {
-					.st1 {
-						fill: #53c54b;
-					}
-				}
-
-				&:hover {
-					.st1 {
-						fill: #53c54b;
-					}
-				}
-			}
-
-			.dislike {
-				width: 32px;
-				height: 32px;
-				transform: scale(-1);
-
-				&.disliked {
-					.st1 {
-						fill: #e6123d;
-					}
-				}
-
-				&:hover {
-					.st1 {
-						fill: #e6123d;
-					}
-				}
-			}
+		.dislike {
+			width: 48px;
+			height: 48px;
 		}
 	}
 
