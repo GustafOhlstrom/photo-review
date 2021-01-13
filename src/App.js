@@ -9,6 +9,7 @@ import SignUp from './pages/sign-up/SignUp';
 import SignIn from './pages/sign-in/SignIn';
 import Review from './pages/review/Review';
 import NotFound from './pages/not-found/NotFound';
+import AuthRoute from './components/AuthRoute';
 
 function App() {
 	return (
@@ -20,7 +21,7 @@ function App() {
 						<Home />
 					</Route>
 
-					<Route path='/galleries'>
+					<AuthRoute path="/galleries">
 						<Route path='/'>
 							<Galleries />
 						</Route>
@@ -28,12 +29,8 @@ function App() {
 						<Route path='/:id'>
 							<Gallery />
 						</Route>
-					</Route>
-
-					<Route path='/gallery/:id'>
-						<Gallery />
-					</Route>
-
+					</AuthRoute>
+					
 					<Route path='/signup'>
 						<SignUp />
 					</Route>
