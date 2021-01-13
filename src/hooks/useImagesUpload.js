@@ -34,8 +34,11 @@ const useImagesUpload = (images, gallery, version) => {
 
 		// Upload images
 		images.forEach(image => {
-			// Get ref, start image upload and save upload to promises array
-			const imageRef = storage.ref(`images/${user.uid}/${image.name}`)
+			// Get ref, and check if image path already exists
+			const imageName = '' + new Date().getTime() + '-' + image.name
+			const imageRef = storage.ref(`images/${user.uid}/${imageName}`)
+
+			// Start image upload and save upload to promises array
 			const uploadTask = imageRef.put(image)
 			promises.push(uploadTask)
 
@@ -52,7 +55,7 @@ const useImagesUpload = (images, gallery, version) => {
 				// Save image information
 				db.collection("galleries").doc(gallery).update({
 					[`versions.${updateVersion}`]: firebase.firestore.FieldValue.arrayUnion({
-						name: image.name,
+						name: imageName,
 						owner: user.uid,
 						path: snapshot.ref.fullPath,
 						size: image.size,
@@ -62,7 +65,7 @@ const useImagesUpload = (images, gallery, version) => {
 				})
 
 				// Save image location
-				db.collection("images").doc(image.name).set(
+				db.collection("images").doc(imageName).set(
 					{
 						locations: firebase.firestore.FieldValue.arrayUnion({ [gallery]: updateVersion })
 					},
