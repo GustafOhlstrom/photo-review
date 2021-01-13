@@ -28,13 +28,13 @@ const Gallery = () => {
 	// New gallery
 	const [newGalleryName, setnewGalleryName] = useState('')
 	const [newGalleryImages, setnewGalleryImages] = useState([])
-	const { id: newId, loading: newLoading, error: newError } = useCreateGallery(newGalleryName, true, newGalleryImages)
+	const { id: newId } = useCreateGallery(newGalleryName, true, newGalleryImages)
 
 	useEffect(() => {
 		if(newId) {
 			navigate(`/galleries/${newId}`)
 		}
-	}, [newId])
+	}, [newId, navigate])
 
 	useEffect(() => {
 		if(versions) {
@@ -51,6 +51,7 @@ const Gallery = () => {
 				setImages([])
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [versions])
 
 	const onCreateReview = () => {

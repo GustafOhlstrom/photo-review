@@ -88,8 +88,8 @@ const useImagesUpload = (images, gallery, version) => {
 				setError(`An error occurred and the images could not be uploaded: ${error.code}`)
 			})
 
-		
-	}, [images, gallery])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [images, gallery, user])
 
 	return { isSuccess, progress, error }
 }

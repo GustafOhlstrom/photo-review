@@ -10,6 +10,7 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 	const { user } = useContext(AuthContext)
 
 	// Create gallery
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(async () => {
 		if(!name || ( uploadImages && (!images || !Array.isArray(images)))) {
 			setLoading(false)
@@ -21,7 +22,7 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 		// Reset states
 		setIsSuccess(false)
 		setLoading(true)
-		setError(false)
+		setError(null)
 		
 		// Create gallery, empty if no images are provided
 		try {
@@ -57,8 +58,7 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 		}
 
 		setLoading(false)
-		
-	}, [name, images])
+	}, [name, uploadImages, images, user])
 
 	return { id, isSuccess, loading, error }
 }

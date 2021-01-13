@@ -8,13 +8,13 @@ import { ReactComponent as ThumbSvg } from '../../assets/icons/thumb.svg';
 
 const Review = () => {
 	const { id, version } = useParams()
-	const { name, images, loading, error } = useReview(id, version)
+	const { name, images, loading } = useReview(id, version)
 
 	const [status, setStatus] = useState(0)
 	const [review, setReview] = useState([])
 
 	const [submitedImages, setSubmitedImages] = useState(null)
-	const { isSuccess, loading: createLoading, error: createError } = useSubmitReview(id, version, submitedImages)
+	const { isSuccess, loading: createLoading } = useSubmitReview(id, version, submitedImages)
 
 	useEffect(() => {
 		if(images && images.length > 0) {
@@ -71,7 +71,7 @@ const Review = () => {
 								<h1>{ name }</h1>
 								<button 
 									disabled={ status !== review.length || loading || createLoading } 
-									title={ (status !== review.length || loading || createLoading) && 'Complete the review first by liking/disliking all images'}
+									title={ (status !== review.length || loading || createLoading) ? 'Complete the review first by liking/disliking all images' : 'Submit reivew'}
 									onClick={onSubmitReview}
 								>
 									Submit review

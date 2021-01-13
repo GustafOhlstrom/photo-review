@@ -8,7 +8,6 @@ import noImage from '../../assets/images/no-image.jpg';
 
 const Galleries = () => {
 	const { galleries, loading } = useGalleries()
-	console.log("galleries", galleries)
 
 	const renderRandomImage = gallery => {
 		const imageArray = []
@@ -55,11 +54,11 @@ const Galleries = () => {
 									<ul>
 										<li>
 											<h3>{ Object.keys(gallery.versions).length }</h3>
-											<h4>{ Object.keys(gallery.versions).length == 1 ? 'Version' : 'Versions' }</h4>
+											<h4>{ Object.keys(gallery.versions).length === 1 ? 'Version' : 'Versions' }</h4>
 										</li>
 										<li>
 											<h3>{ gallery.review.length }</h3>
-											<h4>{ gallery.review.length == 1 ? 'Active review' : 'Active reviews'}</h4>
+											<h4>{ gallery.review.length === 1 ? 'Active review' : 'Active reviews'}</h4>
 										</li>
 									</ul>
 								</Link>

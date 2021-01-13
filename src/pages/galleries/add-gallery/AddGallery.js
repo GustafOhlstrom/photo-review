@@ -12,7 +12,7 @@ const AddGallery = () => {
 
 	useEffect(() => {
 		navigate(`/galleries/${id}`)
-	}, [id])
+	}, [id, navigate])
 
 	const handleSubmit = async e => {
 		e.preventDefault()

@@ -11,6 +11,7 @@ const ImagesUpload = ({ galleryId, version }) => {
 	useEffect(() => {
 		setImages(null)
 		acceptedFiles.length = 0
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isSuccess, error])
 
 	// Upload all accepted images selected/dropped 
@@ -21,7 +22,7 @@ const ImagesUpload = ({ galleryId, version }) => {
 	}, [])
 
 	// Dropzone config
-	const { getRootProps, getInputProps, isDragActive, acceptedFiles, isDragAccept, isDragReject } = useDropzone({
+	const { getRootProps, getInputProps, isDragActive, acceptedFiles, isDragAccept } = useDropzone({
 		accept: 'image/gif, image/jpeg, image/png',
 		onDrop
 	})

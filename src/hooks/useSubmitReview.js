@@ -1,14 +1,13 @@
-import { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../contexts/AuthContext'
+import { useEffect, useState } from 'react'
 import firebase, { db } from '../firebase'
 
 const useSubmitReview = (id, version, images) => {
 	const [isSuccess, setIsSuccess] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(null)
-	const { user } = useContext(AuthContext)
 
 	// Create gallery
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(async () => {
 		if(!id || !version || !images || !Array.isArray(images)) {
 			setLoading(false)
@@ -49,8 +48,7 @@ const useSubmitReview = (id, version, images) => {
 		}
 
 		setLoading(false)
-		
-	}, [id, images])
+	}, [id, version, images])
 
 	return { isSuccess, loading, error }
 }
