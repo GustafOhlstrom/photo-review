@@ -9,6 +9,7 @@ import RenameGallery from './rename-gallery/RenameGallery'
 import { ReactComponent as OptionsSvg } from '../../assets/icons/options.svg'
 import useCreateGallery from '../../hooks/useCreateGallery'
 import Images from './images/Images'
+import * as dayjs from 'dayjs'
 
 const Gallery = () => {
 	const { id } = useParams()
@@ -122,7 +123,7 @@ const Gallery = () => {
 			return
 		}
 
-		if (window.confirm(`Delete version: ${ Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${new Date(+version).toDateString()})` } ?`)) {
+		if (window.confirm(`Delete version: ${ getVersionName(version) } ?`)) {
 			db.collection("galleries").doc(id)
 				.update({
 					[`versions.${version}`]: firebase.firestore.FieldValue.delete()
@@ -189,6 +190,10 @@ const Gallery = () => {
 		setOptions(prevOptions =>  !prevOptions)
 	}
 
+	const getVersionName = version => {
+		return Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${dayjs(+version).format('ddd DD MMM YYYY')})`
+	}
+
 	return (
 		<div id="gallery">
 			<header>
@@ -220,12 +225,12 @@ const Gallery = () => {
 					<div className={`versions drop-down ${versionsDropDown && 'drop-down-display'}`} onClick={onToggleVersionsDropDown}>
 						<div className="row">
 							<p className="version-text">Version: </p>
-							<div className="drop-down-value">{ Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${new Date(+version).toDateString()})` }</div>
+							<div className="drop-down-value">{ getVersionName(version) }</div>
 						</div>
 						
 						<ul className="drop-down-list" style={ versionsDropDown ? { height: `${(Object.keys(versions).length * 44) - 1}px` } : {}}>
 							{
-								Object.keys(versions).sort((a,b) => a - b).reverse().map((version, index) => <li onClick={() => onSelectVersion(version)} key={version}>{ Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${new Date(+version).toDateString()})` }</li>)
+								Object.keys(versions).sort((a,b) => a - b).reverse().map((version, index) => <li onClick={() => onSelectVersion(version)} key={version}>{ getVersionName(version) }</li>)
 							}
 						</ul>
 
