@@ -10,8 +10,7 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 	const { user } = useContext(AuthContext)
 
 	// Create gallery
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(async () => {
+	useEffect(() => {
 		if(!name || ( uploadImages && (!images || !Array.isArray(images)))) {
 			setLoading(false)
 			setError(null)
@@ -20,43 +19,47 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 		}
 
 		// Reset states
-		setIsSuccess(false)
-		setLoading(true)
-		setError(null)
-		
-		// Create gallery, empty if no images are provided
-		try {
-			const version = new Date().getTime()
+		setIsSuccess(false);
+		setLoading(true);
+		setError(null);
 
-			// Save image information for gallery
-			const docRef = await db.collection('galleries').add({
-				name,
-				owner: user.uid,
-				review: [],
-				versions: {
-					[version]: (images && uploadImages) ? images : []
-				}
-			})
-			setId(docRef.id)
+		(async () => {
+			// Create gallery, empty if no images are provided
+			try {
+				const version = new Date().getTime()
 
-			// Save image location
-			images.forEach(image => {
-				db.collection("images").doc(image.name).set(
-					{
-						locations: firebase.firestore.FieldValue.arrayUnion({ [docRef.id]: version })
-					},
-					{ 
-						merge: true  
+				// Save image information for gallery
+				const docRef = await db.collection('galleries').add({
+					name,
+					owner: user.uid,
+					review: [],
+					versions: {
+						[version]: (images && uploadImages) ? images : []
 					}
-				)
-			})
+				})
+				
+				// Save image location
+				if(images && uploadImages) {
+					images.forEach(image => {
+						db.collection("images").doc(image.name).set(
+							{
+								locations: firebase.firestore.FieldValue.arrayUnion({ [docRef.id]: version })
+							},
+							{ 
+								merge: true  
+							}
+						)
+					})
+				}
 
-			setIsSuccess(true)
-		} catch (error) {
-			setLoading(false)
-			setError(`An error occurred when creating the new gallery: ${error.message}`)
-		}
-
+				setId(docRef.id)
+				setIsSuccess(true)
+			} catch (error) {
+				setLoading(false)
+				setError(`An error occurred when creating the new gallery: ${error.message}`)
+			}
+		})();
+		
 		setLoading(false)
 	}, [name, uploadImages, images, user])
 

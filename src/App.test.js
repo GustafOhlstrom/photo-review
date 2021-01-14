@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import App from './App'
 
-it('renders home page when not authorized', async () => {
+it('renders home page when unauthorized', async () => {
 	const history = createMemoryHistory()
 	window.history.pushState({}, '', '/galleries')
 
