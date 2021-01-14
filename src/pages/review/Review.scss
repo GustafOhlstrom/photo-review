@@ -21,7 +21,7 @@
 		}
 
 		h2 {
-			margin: 8px 0;
+			margin: 1.5rem 0 8px 0;
 			font-size: 1rem;
 			line-height: 1rem;
 			text-align: center;
@@ -79,7 +79,6 @@
 	figure {
 		position: relative;
 		width: 100%;
-		cursor: pointer;
 
 		&:before {
 			content: "";
@@ -108,7 +107,9 @@
 		.like,
 		.dislike {
 			margin: 8px 8px 8px 0;
-			fill: #ddd;
+			.st1 {
+				fill: #dddddd;
+			}
 		}
 
 		.like {
@@ -116,12 +117,6 @@
 			height: 32px;
 
 			&.liked {
-				.st1 {
-					fill: $successColor;
-				}
-			}
-
-			&:hover {
 				.st1 {
 					fill: $successColor;
 				}
@@ -134,12 +129,6 @@
 			transform: scale(-1);
 
 			&.disliked {
-				.st1 {
-					fill: $errorColor;
-				}
-			}
-
-			&:hover {
 				.st1 {
 					fill: $errorColor;
 				}
@@ -288,6 +277,28 @@
 	@media screen and (min-width: 1200px) {
 		.images { 
 			grid-template-columns: repeat(5, 1fr);
+		}
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		figure {
+			cursor: pointer;
+
+			.like {
+				&:hover {
+					.st1 {
+						fill: $successColor;
+					}
+				}
+			}
+	
+			.dislike {
+				&:hover {
+					.st1 {
+						fill: $errorColor;
+					}
+				}
+			}
 		}
 	}
 }

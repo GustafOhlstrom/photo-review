@@ -83,7 +83,7 @@ const Review = () => {
 							</div>
 							
 							<h2>Status: { status } / { review.length }</h2>
-							{ console.log("review.length / status", status /  review.length , review.length, status)}
+							
 							<div className="progress-bar">
 								<div className="progress-text"></div>
 								<div className="row">
