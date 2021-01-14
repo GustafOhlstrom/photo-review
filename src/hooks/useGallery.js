@@ -4,6 +4,7 @@ import { db } from '../firebase'
 const useGallery = id => {
 	const [name, setName] = useState("")
 	const [versions, setVersions] = useState([])
+	const [review, setReview] = useState([])
 	const [loading, setLoading] = useState(true)
 
 	// Get images and gallery name from db using gallery id param from current route
@@ -14,6 +15,7 @@ const useGallery = id => {
 				setLoading(true)
 				
 				if(doc.data()) {
+					setReview(doc.data().review || [])
 					setVersions(doc.data().versions || [])
 					setName(doc.data().name);
 				}
@@ -24,7 +26,7 @@ const useGallery = id => {
 		return unsubscribe
 	}, [id])
 
-	return { name, versions, loading }
+	return { name, review, versions, loading }
 }
 
 export default useGallery

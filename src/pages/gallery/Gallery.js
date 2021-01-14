@@ -13,7 +13,7 @@ import * as dayjs from 'dayjs'
 
 const Gallery = () => {
 	const { id } = useParams()
-	const { name, versions, loading } = useGallery(id)
+	const { name, review, versions, loading } = useGallery(id)
 	const [version, setVersion] = useState('')
 	const [images, setImages] = useState([])
 
@@ -76,8 +76,9 @@ const Gallery = () => {
 					review: firebase.firestore.FieldValue.arrayUnion(version)
 				})
 				.then(() => {
-					console.log("Review successfully created!")
-					navigate(`/review/${id}/${version}`)
+					if(window.confirm(`Review was successfully created! \nPress ok to visit review page and cancel to stay`)) {
+						navigate(`/review/${id}/${version}`)
+					} 
 				}).catch(error => {
 					console.error("Error create review of gallery: ", error)
 				})
@@ -194,6 +195,12 @@ const Gallery = () => {
 		return Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${dayjs(+version).format('ddd DD MMM YYYY')})`
 	}
 
+	const onGoToReview = () => {
+		if(review.includes(version)) {
+			navigate(`/review/${id}/${version}`)
+		}
+	}
+
 	return (
 		<div id="gallery">
 			<header>
@@ -209,8 +216,9 @@ const Gallery = () => {
 							<OptionsSvg />
 						</div>
 						
-						<ul className="drop-down-list">
+						<ul className="drop-down-list" style={ options ? (review.includes(version) ? { height: '326px' } : { height: '282px' }) : {} }>
 							<li onClick={onCreateReview}>Create a review</li>
+							{ review.includes(version) && <li onClick={onGoToReview}>Go to review page</li> } 
 							<li onClick={onToggleRename}>Rename gallery</li>
 							<li onClick={onDeleteImages}>Delete selected images</li>
 							<li onClick={onCreateGallery}>Create new gallery based on selected images</li>
@@ -228,7 +236,7 @@ const Gallery = () => {
 							<div className="drop-down-value">{ getVersionName(version) }</div>
 						</div>
 						
-						<ul className="drop-down-list" style={ versionsDropDown ? { height: `${(Object.keys(versions).length * 44) - 1}px` } : {}}>
+						<ul className="drop-down-list" style={ versionsDropDown ? { height: `${(Object.keys(versions).length * 44) - 1}px` } : {} }>
 							{
 								Object.keys(versions).sort((a,b) => a - b).reverse().map((version, index) => <li onClick={() => onSelectVersion(version)} key={version}>{ getVersionName(version) }</li>)
 							}
