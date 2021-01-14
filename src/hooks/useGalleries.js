@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { AuthContext } from '../contexts/AuthContext'
 import { db } from '../firebase'
 
 const useGalleries = () => {
 	const [galleries, setGalleries] = useState([])
 	const [loading, setLoading] = useState(true)
+	const { user } = useContext(AuthContext)
 
 	// Get all galleries from db 
 	useEffect(() => {
@@ -12,7 +14,9 @@ const useGalleries = () => {
 			.onSnapshot(snapshot => {
 				setLoading(true)
 
-				const tempGalleries = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+				const tempGalleries = snapshot.docs
+					.map(doc => ({ ...doc.data(), id: doc.id }))
+					.filter(gallery => gallery.owner === user.uid)
 				
 				setGalleries(tempGalleries)
 				setLoading(false)
