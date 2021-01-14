@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
+import Loader from '../components/loader/Loader'
 import { auth } from '../firebase'
 
 const AuthContext = createContext()
@@ -40,7 +41,7 @@ const AuthContextProvider = (props) => {
 		<AuthContext.Provider value={contextValues}>
 			{ 
 				loading
-					? <p>Loading...</p>
+					? <Loader />
 					: props.children
 			}
 		</AuthContext.Provider>

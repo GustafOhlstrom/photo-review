@@ -13,40 +13,38 @@ import AuthRoute from './components/AuthRoute';
 
 function App() {
 	return (
-		<Router>
-			<AuthContextProvider>
-				<Navbar />
-				<Routes>
+		<AuthContextProvider>
+			<Navbar />
+			<Routes>
+				<Route path='/'>
+					<Home />
+				</Route>
+
+				<AuthRoute path="/galleries">
 					<Route path='/'>
-						<Home />
+						<Galleries />
 					</Route>
 
-					<AuthRoute path="/galleries">
-						<Route path='/'>
-							<Galleries />
-						</Route>
-
-						<Route path='/:id'>
-							<Gallery />
-						</Route>
-					</AuthRoute>
-					
-					<Route path='/signup'>
-						<SignUp />
+					<Route path='/:id'>
+						<Gallery />
 					</Route>
+				</AuthRoute>
+				
+				<Route path='/signup'>
+					<SignUp />
+				</Route>
 
-					<Route path='/signin'>
-						<SignIn />
-					</Route>
+				<Route path='/signin'>
+					<SignIn />
+				</Route>
 
-					<Route path='/review/:id/:version'>
-						<Review />
-					</Route>
+				<Route path='/review/:id/:version'>
+					<Review />
+				</Route>
 
-					<Route path="*" element={<NotFound />} />
-				</Routes>
-			</AuthContextProvider>
-		</Router>
+				<Route path="*" element={<NotFound />} />
+			</Routes>
+		</AuthContextProvider>
 	);
 }
 
