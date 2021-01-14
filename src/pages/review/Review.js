@@ -4,33 +4,40 @@ import { useParams } from 'react-router-dom'
 import useReview from '../../hooks/useReview'
 import Loader from '../../components/loader/Loader'
 import useSubmitReview from '../../hooks/useSubmitReview'
-import { ReactComponent as ThumbSvg } from '../../assets/icons/thumb.svg';
+import Images from './images/Images'
 
 const Review = () => {
+	// Review information
 	const { id, version } = useParams()
 	const { name, images, loading } = useReview(id, version)
 	
+	// Track user review input
 	const [review, setReview] = useState([])
 	const [status, setStatus] = useState(0)
 	const [liked, setLiked] = useState(0)
 	const [disliked, setDisliked] = useState(0)
 
+	// Submit Review
 	const [submitedImages, setSubmitedImages] = useState(null)
 	const { isSuccess, loading: createLoading } = useSubmitReview(id, version, submitedImages)
 
+	// Reset review if new images are provided
 	useEffect(() => {
 		if(images && images.length > 0) {
 			setReview(images.map(() => 'undetermined'))
 		}
 	}, [images]);
 
+	// Update review varaibles 
 	useEffect(() => {
+		console.log("test")
 		setStatus(review.filter(item => item !== 'undetermined').length)
 		setLiked(review.filter(item => item === 'liked').length)
 		setDisliked(review.filter(item => item === 'disliked').length)
 	}, [review])
 
-	const onStusChange = (image, status) => {
+	// Handle new like/dislike input
+	const onStatusChange = (image, status) => {
 		const imageIndex = images.indexOf(image)
 
 		setReview(prevReview => prevReview.map((item, index) => (
@@ -42,26 +49,12 @@ const Review = () => {
 		)))
 	}
 
+	// Submit review 
 	const onSubmitReview = () => {
 		if(status === review.length) {
 			const galleryImages = images.filter((image, index) => review[index] === 'liked')
 			setSubmitedImages(galleryImages)
 		}
-	}
-
-	const [imageIndex, setImageIndex] = useState(0)
-	const [lightBox, setLightBox] = useState(false)
-	const onToggleLightBox = index => {
-		setLightBox(prevLightBox => !prevLightBox)
-		index && setImageIndex(index)
-	}
-
-	const onPreviousImage = () => {
-		setImageIndex(prevIndex => prevIndex >= 1 ? prevIndex - 1 : images.length - 1)
-	}
-
-	const onNextImage = () => {
-		setImageIndex(prevIndex => prevIndex + 1 !== images.length ? prevIndex + 1 : 0)
 	}
 
 	return (
@@ -71,6 +64,7 @@ const Review = () => {
 					? <h1>Review successfully submitted!</h1>
 					: <>
 						<header>
+							{/* Title and submit button */}
 							<div className="row">
 								<h1>{ name }</h1>
 								<button 
@@ -82,8 +76,8 @@ const Review = () => {
 								</button>
 							</div>
 							
+							{/* Review status with progress bar */}
 							<h2>Status: { status } / { review.length }</h2>
-							
 							<div className="progress-bar">
 								<div className="progress-text"></div>
 								<div className="row">
@@ -93,6 +87,7 @@ const Review = () => {
 								
 							</div>
 							
+							{/* User instructions */}
 							<p>Like all images you want to keep and dislike the rest.</p>
 							<p>When all images have been marked please submit the review.</p>
 						</header>
@@ -100,59 +95,11 @@ const Review = () => {
 						{	/* Display all images */
 							loading 
 								? <Loader />
-								: <div className="images">
-								{
-									lightBox
-										? <figure className="lightbox">
-											<div className="close" onClick={() => onToggleLightBox()} >
-												<div className="line1"></div>
-												<div className="line2"></div>
-											</div>
-											
-											<img src={images[imageIndex].url} alt={images[imageIndex].name}/>
-											
-											<div className="row">
-												<div className="previous" onClick={() => onPreviousImage()}>
-													<div className="arrow left"></div>
-												</div>
-													
-												<div className="next" onClick={() => onNextImage()}>
-													<div className="arrow right"></div>
-												</div>
-											</div>
-
-											<div className="review-buttons">
-												<ThumbSvg 
-													className={`like ${ review[imageIndex] === 'liked' && 'liked' } `} 
-													onClick={() => onStusChange(images[imageIndex], 'liked')} 
-													title="like"
-												/>
-												<ThumbSvg 
-													className={`dislike ${ review[imageIndex] === 'disliked' && 'disliked' }`} 
-													onClick={() => onStusChange(images[imageIndex], 'disliked')} 
-													title="dislike"
-												/>
-											</div>
-										</figure> 
-										: images.map((image, index) => (
-											<figure className={`${ review[index] === 'liked' && 'liked' } ${ review[index] === 'disliked' && 'disliked' }`} key={image.url} >
-												<img src={image.url} alt={image.name} onClick={() => onToggleLightBox(index)} />
-												<div className="review-buttons">
-													<ThumbSvg 
-														className={`like ${ review[index] === 'liked' && 'liked' } `} 
-														onClick={() => onStusChange(image, 'liked')} 
-														title="like"
-													/>
-													<ThumbSvg 
-														className={`dislike ${ review[index] === 'disliked' && 'disliked' }`} 
-														onClick={() => onStusChange(image, 'disliked')} 
-														title="dislike"
-													/>
-												</div>
-											</figure>
-										))
-									}
-								</div>
+								:  <Images 
+										images={images} 
+										review={review}
+										onStatusChange={(image, status) => onStatusChange(image, status)}
+									/>
 						}
 					</>
 			}

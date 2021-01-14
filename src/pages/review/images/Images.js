@@ -1,7 +1,8 @@
 import './Images.scss'
 import React, { useState } from 'react'
-
-const Images = ({images, selected, setSelected}) => {
+import { ReactComponent as ThumbSvg } from '../../../assets/icons/thumb.svg';
+	
+const Images = ({images, review, onStatusChange}) => {
 	const [imageIndex, setImageIndex] = useState(0)
 	const [lightBox, setLightBox] = useState(false)
 	
@@ -18,12 +19,7 @@ const Images = ({images, selected, setSelected}) => {
 		setImageIndex(prevIndex => prevIndex + 1 !== images.length ? prevIndex + 1 : 0)
 	}
 
-	const onSelect = image => {
-		selected.includes(image)
-			? setSelected(prevSelected => prevSelected.filter(selected => selected !== image))
-			: setSelected(prevSelected =>  [...prevSelected, image])
-	}
-
+	console.log(lightBox, images, review)
 	return (
 		<div id="images">
 			{
@@ -45,18 +41,41 @@ const Images = ({images, selected, setSelected}) => {
 								<div className="arrow right"></div>
 							</div>
 						</div>
+
+						<div className="review-buttons">
+							<ThumbSvg 
+								className={`like ${ review[imageIndex] === 'liked' && 'liked' } `} 
+								onClick={() => onStatusChange(images[imageIndex], 'liked')} 
+								title="like"
+							/>
+							<ThumbSvg 
+								className={`dislike ${ review[imageIndex] === 'disliked' && 'disliked' }`} 
+								onClick={() => onStatusChange(images[imageIndex], 'disliked')} 
+								title="dislike"
+							/>
+						</div>
 					</div> 
 					: <div className="image-grid">
-						{
+						{ 
 							images.map((image, index) => (
-								<figure key={image.url} >
-									<div className={`select-icon ${ selected.includes(image) && 'selected' }`} onClick={() => onSelect(image)}><div></div></div>
+								<figure className={`${ review[index] === 'liked' && 'liked' } ${ review[index] === 'disliked' && 'disliked' }`} key={image.url} >
 									<img src={image.url} alt={image.name} onClick={() => onToggleLightBox(index)} />
+									<div className="review-buttons">
+										<ThumbSvg 
+											className={`like ${ review[index] === 'liked' && 'liked' } `} 
+											onClick={() => onStatusChange(image, 'liked')} 
+											title="like"
+										/>
+										<ThumbSvg 
+											className={`dislike ${ review[index] === 'disliked' && 'disliked' }`} 
+											onClick={() => onStatusChange(image, 'disliked')} 
+											title="dislike"
+										/>
+									</div>
 								</figure>
 							))
 						}
 					</div>
-					 
 			}
 		</div>
 	)
