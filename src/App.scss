@@ -67,8 +67,14 @@ input {
 	align-items: center;
 }
 
+.success {
+	margin-bottom: 1rem;
+	color: $successColor;
+	text-align: center;
+}
+
 .error {
 	margin-bottom: 1rem;
-	color: #e6123d;
+	color: $errorColor;
 	text-align: center;
 }

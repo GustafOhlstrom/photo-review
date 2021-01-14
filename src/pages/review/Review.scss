@@ -40,15 +40,15 @@
 				align-items: center;
 
 				.progress-completed {
-					color: #000;
+					color: #fff;
 					text-align: center;
 	
 					&.liked {
-						background-color: #53c54b;
+						background-color: $successColor;
 					}
 
 					&.disliked {
-						background-color: #e6123d;
+						background-color: $errorColor;
 					}
 
 					&:first-of-type {
@@ -117,13 +117,13 @@
 
 			&.liked {
 				.st1 {
-					fill: #53c54b;
+					fill: $successColor;
 				}
 			}
 
 			&:hover {
 				.st1 {
-					fill: #53c54b;
+					fill: $successColor;
 				}
 			}
 		}
@@ -135,13 +135,13 @@
 
 			&.disliked {
 				.st1 {
-					fill: #e6123d;
+					fill: $errorColor;
 				}
 			}
 
 			&:hover {
 				.st1 {
-					fill: #e6123d;
+					fill: $errorColor;
 				}
 			}
 		}

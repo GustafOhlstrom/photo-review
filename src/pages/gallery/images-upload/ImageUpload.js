@@ -5,10 +5,25 @@ import { useDropzone } from 'react-dropzone'
 
 const ImagesUpload = ({ galleryId, version }) => {
 	const [images, setImages] = useState(null)
+	const [alert, setAlert] = useState(null)
 	const { isSuccess, progress, error } = useImagesUpload(images, galleryId, version)
 
 	// Clear images after upload is completed or get an error
 	useEffect(() => {
+		if (isSuccess) {
+			setAlert({
+				type: 'success',
+				text: 'Images uploaded!',
+			});
+		} else if (error) {
+			setAlert({
+				type: 'error',
+				text: error,
+			});
+		} else {
+			setAlert(null);
+		}
+
 		setImages(null)
 		acceptedFiles.length = 0
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,12 +76,8 @@ const ImagesUpload = ({ galleryId, version }) => {
 				progress !== null && <div className="progress-bar"><div className="progress-completed" style={{width:`${ progress }%`}}>{ progress }%</div></div>
 			}
 
-			{	/* Images where uploaded successfully message */
-				isSuccess && <p className="success">Images uploaded!</p>
-			}
-
-			{	/* Images experienced an error during upload message */
-				error && <p className="error">{ error }</p>
+			{	/* Images upload alert, either success or error */
+				alert && <p className={alert.type}>{ alert.text }</p>
 			}
 		</div>
 	)

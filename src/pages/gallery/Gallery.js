@@ -50,6 +50,7 @@ const Gallery = () => {
 				setVersion(Object.keys(versions)[0])
 				setImages([])
 			}
+			setSelected([])
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [versions])
@@ -62,6 +63,7 @@ const Gallery = () => {
 		if(version) {
 			setVersion(version)
 			setImages(versions[version])
+			setSelected([])
 		}
 	}
 	
@@ -91,6 +93,7 @@ const Gallery = () => {
 			})
 
 			deleteImageLocationData(selected, version)
+			setSelected([])
 		}
 	}
 
@@ -119,7 +122,7 @@ const Gallery = () => {
 			return
 		}
 
-		if (window.confirm(`Delete version: ${version} ?`)) {
+		if (window.confirm(`Delete version: ${ Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${new Date(+version).toDateString()})` } ?`)) {
 			db.collection("galleries").doc(id)
 				.update({
 					[`versions.${version}`]: firebase.firestore.FieldValue.delete()
@@ -131,6 +134,8 @@ const Gallery = () => {
 				}).catch(error => {
 					console.error("Error removing document: ", error)
 				})
+			
+			setSelected([])
 		} 
 	}
 
