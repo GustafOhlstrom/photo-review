@@ -6,37 +6,30 @@ import ImagesUpload from './images-upload/ImageUpload'
 import Loader from '../../components/loader/Loader'
 import firebase, { db, storage } from '../../firebase'
 import RenameGallery from './rename-gallery/RenameGallery'
-import { ReactComponent as OptionsSvg } from '../../assets/icons/options.svg'
 import useCreateGallery from '../../hooks/useCreateGallery'
 import Images from './images/Images'
 import * as dayjs from 'dayjs'
+import VersionsDropDown from './versions-drop-down/VersionsDropDown'
+import OptionsDropDown from './options-drop-down/OptionsDropDown'
 
 const Gallery = () => {
+	// Gallery information
 	const { id } = useParams()
 	const { name, review, versions, loading } = useGallery(id)
 	const [version, setVersion] = useState('')
 	const [images, setImages] = useState([])
-
 	const navigate = useNavigate()
 
 	// Actions
 	const [rename, setRename] = useState(false)
 	const [selected, setSelected] = useState([])
 
-	// Drop downs
-	const [versionsDropDown, setVersionsDropDown] = useState(false)
-
 	// New gallery
 	const [newGalleryName, setnewGalleryName] = useState('')
 	const [newGalleryImages, setnewGalleryImages] = useState([])
-	const { id: newId } = useCreateGallery(newGalleryName, true, newGalleryImages)
+	const { id: newId, loading: newLoading, error} = useCreateGallery(newGalleryName, true, newGalleryImages)
 
-	useEffect(() => {
-		if(newId) {
-			navigate(`/galleries/${newId}`)
-		}
-	}, [newId, navigate])
-
+	// Update images and version when new information in provided by snapshot i useGalelry
 	useEffect(() => {
 		if(versions) {
 			if(Object.keys(versions).length > 0) {
@@ -55,38 +48,46 @@ const Gallery = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [versions])
-
-	const onToggleVersionsDropDown = () => {
-		setVersionsDropDown(prevVersionsDropDown =>  !prevVersionsDropDown)
-	}
 	
-	const onSelectVersion = version => {
-		if(version) {
-			setVersion(version)
-			setImages(versions[version])
-			setSelected([])
+	/**
+	 * ------------  Create ------------ 
+	**/
+
+	const onCreateReview = () => {
+		db.collection("galleries").doc(id)
+			.update({
+				review: firebase.firestore.FieldValue.arrayUnion(version)
+			})
+			.then(() => {
+				if(window.confirm(`Review was successfully created! \nPress ok to visit review page and cancel to stay`)) {
+					navigate(`/review/${id}/${version}`)
+				} 
+			}).catch(error => {
+				console.error("Error create review of gallery: ", error)
+			})
+	}
+
+	const onCreateGallery = () => {
+		if(selected.length > 0) {
+			const newName = prompt("Enter new gallery name")
+			if(newName) {
+				setnewGalleryName(newName)
+				setnewGalleryImages(selected)
+			}
 		}
 	}
+
+	// Navigate to new gallery created
+	useEffect(() => {
+		if(newId) {
+			navigate(`/galleries/${newId}`)
+		}
+	}, [newId, navigate])
+
 	
-	const onCreateReview = () => {
-		console.log("create review", id, version)
-
-		db.collection("galleries").doc(id)
-				.update({
-					review: firebase.firestore.FieldValue.arrayUnion(version)
-				})
-				.then(() => {
-					if(window.confirm(`Review was successfully created! \nPress ok to visit review page and cancel to stay`)) {
-						navigate(`/review/${id}/${version}`)
-					} 
-				}).catch(error => {
-					console.error("Error create review of gallery: ", error)
-				})
-	}
-
-	const onToggleRename = () => {
-		setRename(prevRename =>  !prevRename)
-	}
+	/**
+	 * ------------  Delete ------------ 
+	**/
 
 	const onDeleteImages = () => {
 		if(selected.length > 0) {
@@ -131,7 +132,6 @@ const Gallery = () => {
 				})
 				.then(() => {
 					deleteImageLocationData(images, version)
-
 					console.log("Version successfully deleted!")
 				}).catch(error => {
 					console.error("Error removing document: ", error)
@@ -176,29 +176,31 @@ const Gallery = () => {
 		})
 	}
 
-	const onCreateGallery = () => {
-		if(selected.length > 0) {
-			const newName = prompt("Enter new gallery name")
-			if(newName) {
-				setnewGalleryName(newName)
-				setnewGalleryImages(selected)
-			}
-		}
-	}
-
-	const [options, setOptions] = useState(false)
-	const onToggleOptions = () => {
-		setOptions(prevOptions =>  !prevOptions)
-	}
-
-	const getVersionName = version => {
-		return Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${dayjs(+version).format('ddd DD MMM YYYY')})`
-	}
+	/**
+	 * ------------  Misc Actions ------------ 
+	**/
 
 	const onGoToReview = () => {
 		if(review.includes(version)) {
 			navigate(`/review/${id}/${version}`)
 		}
+	}
+
+	const onToggleRename = () => {
+		setRename(prevRename =>  !prevRename)
+	}
+
+	// Update data when a different version is selected
+	const onSelectVersion = version => {
+		if(version) {
+			setVersion(version)
+			setImages(versions[version])
+			setSelected([])
+		}
+	}
+
+	const getVersionName = version => {
+		return Object.keys(versions).sort((a,b) => a - b).indexOf(version) + 1 + ` (${dayjs(+version).format('ddd DD MMM YYYY')})`
 	}
 
 	return (
@@ -211,48 +213,38 @@ const Gallery = () => {
 							: <h1>{ name }</h1>
 					}
 
-					<div className={`options drop-down ${options && 'drop-down-display'}`} onClick={onToggleOptions}>
-						<div className={`drop-down-value ${options && 'spin-option-wheel'}`}>	
-							<OptionsSvg />
-						</div>
-						
-						<ul className="drop-down-list" style={ options ? (review.includes(version) ? { height: '326px' } : { height: '282px' }) : {} }>
-							<li onClick={onCreateReview}>Create a review</li>
-							{ review.includes(version) && <li onClick={onGoToReview}>Go to review page</li> } 
-							<li onClick={onToggleRename}>Rename gallery</li>
-							<li onClick={onDeleteImages}>Delete selected images</li>
-							<li onClick={onCreateGallery}>Create new gallery based on selected images</li>
-							<li onClick={onDeleteVersion}>Delete version</li>
-							<li onClick={onDeleteGallery}>Delete gallery</li>
-						</ul>
-					</div>
+					<OptionsDropDown 
+						onCreateReview={onCreateReview} 
+						onGoToReview={onGoToReview}
+						onToggleRename={onToggleRename} 
+						onDeleteImages={onDeleteImages}
+						onCreateGallery={onCreateGallery} 
+						onDeleteVersion={onDeleteVersion} 
+						onDeleteGallery={onDeleteGallery} 
+						review={review}
+						version={version}
+					/>
 				</div>
 				
 				{
-					version &&
-					<div className={`versions drop-down ${versionsDropDown && 'drop-down-display'}`} onClick={onToggleVersionsDropDown}>
-						<div className="row">
-							<p className="version-text">Version: </p>
-							<div className="drop-down-value">{ getVersionName(version) }</div>
-						</div>
-						
-						<ul className="drop-down-list" style={ versionsDropDown ? { height: `${(Object.keys(versions).length * 44) - 1}px` } : {} }>
-							{
-								Object.keys(versions).sort((a,b) => a - b).reverse().map((version, index) => <li onClick={() => onSelectVersion(version)} key={version}>{ getVersionName(version) }</li>)
-							}
-						</ul>
-
-						<div className="arrow"></div>
-					</div>
+					version &&	
+					<VersionsDropDown 
+						versions={versions}
+						version={version}
+						onSelectVersion={onSelectVersion}
+						getVersionName={getVersionName}
+					/>
 				}
 				
 			</header>
 			
-
+			{/* Dropzone for uploading images */}
 			<ImagesUpload galleryId={ id } version={ version } />
 
+			{ error && !loading && <p className="error">{ error }</p> }
+
 			{	/* Display all images */
-				loading 
+				(loading || newLoading)
 					? <Loader />
 					: <Images 
 						images={images} 

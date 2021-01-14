@@ -19,7 +19,6 @@ const Images = ({images, review, onStatusChange}) => {
 		setImageIndex(prevIndex => prevIndex + 1 !== images.length ? prevIndex + 1 : 0)
 	}
 
-	console.log(lightBox, images, review)
 	return (
 		<div id="images">
 			{

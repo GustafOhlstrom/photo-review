@@ -1,0 +1,69 @@
+@import '../../../variables.scss';
+
+#options-drop-down { 
+	position: relative;
+
+	.drop-down-value {
+		height: 24px;
+		width: 24px;
+
+		transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+
+		transition: all 0.2s linear;
+
+		&:hover {
+			color: $themeColor;
+		}
+
+		&.spin-option-wheel {
+			transform: rotate(90deg);
+			-webkit-transform: rotate(90deg);
+		}
+	}
+
+	.drop-down-list {
+		position: absolute;
+		top: 32px;
+		right: 0;
+
+		height: 0;
+		min-width: 250px;
+		width: auto;
+		
+		color: #000;
+		background-color: #fff;
+		border-radius: 5px;
+		box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.25);
+
+		z-index: 4;
+		overflow: hidden;
+		transition: height 0.1s linear;
+
+		li {
+			padding: 12px;
+
+			font-size: 16px;
+			border-top: 1px solid #ddd;
+
+			&:hover {
+				color: #fff;
+				background-color: $themeColor;
+			}
+
+			&:first-of-type {
+				border-top: none;
+			}
+		}
+	}
+
+	&.drop-down-display {
+		.drop-down-list {
+			height: 282px;
+		}
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		cursor: pointer;
+	}
+}

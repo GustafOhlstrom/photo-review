@@ -30,7 +30,6 @@ const Review = () => {
 
 	// Update review varaibles 
 	useEffect(() => {
-		console.log("test")
 		setStatus(review.filter(item => item !== 'undetermined').length)
 		setLiked(review.filter(item => item === 'liked').length)
 		setDisliked(review.filter(item => item === 'disliked').length)
@@ -95,11 +94,11 @@ const Review = () => {
 						{	/* Display all images */
 							loading 
 								? <Loader />
-								:  <Images 
-										images={images} 
-										review={review}
-										onStatusChange={(image, status) => onStatusChange(image, status)}
-									/>
+								: <Images 
+									images={images} 
+									review={review}
+									onStatusChange={(image, status) => onStatusChange(image, status)}
+								/>
 						}
 					</>
 			}

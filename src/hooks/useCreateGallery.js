@@ -4,7 +4,6 @@ import firebase, { db } from '../firebase'
 
 const useCreateGallery = (name, uploadImages = false, images) => {
 	const [id, setId] = useState('')
-	const [isSuccess, setIsSuccess] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(null)
 	const { user } = useContext(AuthContext)
@@ -19,7 +18,6 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 		}
 
 		// Reset states
-		setIsSuccess(false);
 		setLoading(true);
 		setError(null);
 
@@ -53,7 +51,6 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 				}
 
 				setId(docRef.id)
-				setIsSuccess(true)
 			} catch (error) {
 				setLoading(false)
 				setError(`An error occurred when creating the new gallery: ${error.message}`)
@@ -63,7 +60,7 @@ const useCreateGallery = (name, uploadImages = false, images) => {
 		setLoading(false)
 	}, [name, uploadImages, images, user])
 
-	return { id, isSuccess, loading, error }
+	return { id, loading, error }
 }
 
 export default useCreateGallery

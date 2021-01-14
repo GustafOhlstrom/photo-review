@@ -1,0 +1,92 @@
+@import '../../../variables.scss';
+
+#versions-drop-down {
+	position: relative;
+	display: inline-block;
+	width: auto;
+	padding-right: 32px;
+
+	.version-text {
+		margin-right: 8px;
+		padding: 8px 0;
+
+		font-size: 16px;
+		line-height: 16px;
+	}
+
+	.drop-down-value {
+		height: auto;
+		width: 100%;
+		padding: 8px 0 8px 0;
+
+		font-size: 16px;
+		line-height: 16px;
+	}
+
+	.arrow {
+		position: absolute;
+		top: 5px;
+		right: 8px;
+
+		border: solid #fff;
+		border-width: 0 2px 2px 0;
+		width: 2px;
+		padding: 5px;
+		margin-left: 0;
+
+		transform: rotate(45deg);
+		-webkit-transform: rotate(45deg);
+
+		transition: all 0.2s linear;
+	}
+
+	.drop-down-list {
+		position: absolute;
+		top: 32px;
+		right: 0;
+
+		height: 0;
+		width: 100%;
+		
+		color: #000;
+		background-color: #fff;
+		border-radius: 5px;
+		box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.25);
+
+		z-index: 3;
+		overflow: hidden;
+		transition: height 0.1s linear;
+
+		li {
+			padding: 12px;
+
+			font-size: 16px;
+			border-top: 1px solid #ddd;
+			&:hover {
+				color: #fff;
+				background-color: $themeColor;
+			}
+
+			&:first-of-type {
+				border-top: none;
+			}
+		}
+	}
+
+	&.drop-down-display {
+		.drop-down-list {
+			height: 43px;
+		}
+
+		.arrow {
+			top: 12px;
+
+			transform: rotate(225deg);
+			-webkit-transform: rotate(225deg);
+		}
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		cursor: pointer;
+	}
+}
