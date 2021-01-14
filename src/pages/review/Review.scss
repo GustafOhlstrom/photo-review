@@ -18,11 +18,49 @@
 			h1 {
 				text-transform: capitalize;
 			}
+		}
 
-			h2 {
-				margin: 4px 0 1rem 0;
-				font-size: 1rem;
-				line-height: 1rem;
+		h2 {
+			margin: 8px 0;
+			font-size: 1rem;
+			line-height: 1rem;
+			text-align: center;
+		}
+
+		.progress-bar {
+			min-height: 19px;
+			width: 100%;
+			margin-bottom: 1rem;
+			background-color: $bcolor4;
+			border: 1px solid #fff;
+			border-radius: 5px;
+
+			.row {
+				justify-content: start;
+				align-items: center;
+
+				.progress-completed {
+					color: #000;
+					text-align: center;
+	
+					&.liked {
+						background-color: #53c54b;
+					}
+
+					&.disliked {
+						background-color: #e6123d;
+					}
+
+					&:first-of-type {
+						border-top-left-radius: 5px;
+						border-bottom-left-radius: 5px;
+					}
+
+					&:last-of-type {
+						border-top-right-radius: 5px;
+						border-bottom-right-radius: 5px;
+					}
+				}
 			}
 		}
 

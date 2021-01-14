@@ -9,9 +9,11 @@ import { ReactComponent as ThumbSvg } from '../../assets/icons/thumb.svg';
 const Review = () => {
 	const { id, version } = useParams()
 	const { name, images, loading } = useReview(id, version)
-
-	const [status, setStatus] = useState(0)
+	
 	const [review, setReview] = useState([])
+	const [status, setStatus] = useState(0)
+	const [liked, setLiked] = useState(0)
+	const [disliked, setDisliked] = useState(0)
 
 	const [submitedImages, setSubmitedImages] = useState(null)
 	const { isSuccess, loading: createLoading } = useSubmitReview(id, version, submitedImages)
@@ -24,6 +26,8 @@ const Review = () => {
 
 	useEffect(() => {
 		setStatus(review.filter(item => item !== 'undetermined').length)
+		setLiked(review.filter(item => item === 'liked').length)
+		setDisliked(review.filter(item => item === 'disliked').length)
 	}, [review])
 
 	const onStusChange = (image, status) => {
@@ -77,8 +81,16 @@ const Review = () => {
 									Submit review
 								</button>
 							</div>
-							<div className="row">
-								<h2>Completed: { status } / { review.length }</h2>
+							
+							<h2>Status: { status } / { review.length }</h2>
+							{ console.log("review.length / status", status /  review.length , review.length, status)}
+							<div className="progress-bar">
+								<div className="progress-text"></div>
+								<div className="row">
+									<div className="progress-completed liked" style={{width:`${ (liked / review.length)* 100 }%`}}>{ liked !== 0 && liked }</div>
+									<div className="progress-completed disliked" style={{width:`${ (disliked / review.length)* 100 }%`}}>{ disliked !== 0 && disliked }</div>
+								</div>
+								
 							</div>
 							
 							<p>Like all images you want to keep and dislike the rest.</p>

@@ -23,7 +23,7 @@ const useGalleries = () => {
 			})
 			
 		return unsubscribe
-	}, [])
+	}, [user])
 
 	return { galleries, loading }
 }

@@ -1,5 +1,5 @@
 import './App.scss';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import AuthContextProvider from './contexts/AuthContext'
 import Navbar from './components/navbar/Navbar';
 import Home from './pages/home/Home';
