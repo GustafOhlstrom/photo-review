@@ -96,7 +96,7 @@
 		}
 	}
 
-	@media screen and (min-width: 600px) {
+	@media screen and (min-width: 500px) {
 		.gallery-grid { 
 			grid-template-columns: repeat(2, 1fr);
 			grid-gap: 1.5rem;
@@ -104,7 +104,7 @@
 		}
 	}
 
-	@media screen and (min-width: 900px) {
+	@media screen and (min-width: 800px) {
 		.gallery-grid { 
 			grid-template-columns: repeat(3, 1fr);
 		}

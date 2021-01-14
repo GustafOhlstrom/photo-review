@@ -6,8 +6,10 @@ import ImagesUpload from './images-upload/ImageUpload'
 import Loader from '../../components/loader/Loader'
 import firebase, { db, storage } from '../../firebase'
 import RenameGallery from './rename-gallery/RenameGallery'
+import OptionsDropDown from './options-drop-down/OptionsDropDown'
 import { ReactComponent as OptionsSvg } from '../../assets/icons/options.svg'
 import useCreateGallery from '../../hooks/useCreateGallery'
+import Images from './images/Images'
 
 const Gallery = () => {
 	const { id } = useParams()
@@ -22,7 +24,6 @@ const Gallery = () => {
 	const [selected, setSelected] = useState([])
 
 	// Drop downs
-	const [options, setOptions] = useState(false)
 	const [versionsDropDown, setVersionsDropDown] = useState(false)
 
 	// New gallery
@@ -54,6 +55,17 @@ const Gallery = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [versions])
 
+	const onToggleVersionsDropDown = () => {
+		setVersionsDropDown(prevVersionsDropDown =>  !prevVersionsDropDown)
+	}
+	
+	const onSelectVersion = version => {
+		if(version) {
+			setVersion(version)
+			setImages(versions[version])
+		}
+	}
+	
 	const onCreateReview = () => {
 		console.log("create review", id, version)
 
@@ -67,6 +79,20 @@ const Gallery = () => {
 				}).catch(error => {
 					console.error("Error create review of gallery: ", error)
 				})
+	}
+
+	const onToggleRename = () => {
+		setRename(prevRename =>  !prevRename)
+	}
+
+	const onDeleteImages = () => {
+		if(selected.length > 0) {
+			db.collection("galleries").doc(id).update({
+				[`versions.${version}`]: firebase.firestore.FieldValue.arrayRemove(...selected)
+			})
+
+			deleteImageLocationData(selected, version)
+		}
 	}
 
 	const onDeleteGallery = () => {
@@ -107,41 +133,6 @@ const Gallery = () => {
 					console.error("Error removing document: ", error)
 				})
 		} 
-	}
-
-	const onToggleOptions = () => {
-		setOptions(prevOptions =>  !prevOptions)
-	}
-
-	const onToggleVersionsDropDown = () => {
-		setVersionsDropDown(prevVersionsDropDown =>  !prevVersionsDropDown)
-	}
-
-	const onSelectVersion = version => {
-		if(version) {
-			setVersion(version)
-			setImages(versions[version])
-		}
-	}
-
-	const onToggleRename = () => {
-		setRename(prevRename =>  !prevRename)
-	}
-
-	const onSelect = image => {
-		selected.includes(image)
-			? setSelected(prevSelected => prevSelected.filter(selected => selected !== image))
-			: setSelected(prevSelected =>  [...prevSelected, image])
-	}
-
-	const onDeleteImages = () => {
-		if(selected.length > 0) {
-			db.collection("galleries").doc(id).update({
-				[`versions.${version}`]: firebase.firestore.FieldValue.arrayRemove(...selected)
-			})
-
-			deleteImageLocationData(selected, version)
-		}
 	}
 
 	const deleteImageLocationData = (images, version) => {
@@ -189,19 +180,9 @@ const Gallery = () => {
 		}
 	}
 
-	const [imageIndex, setImageIndex] = useState(0)
-	const [lightBox, setLightBox] = useState(false)
-	const onToggleLightBox = index => {
-		setLightBox(prevLightBox => !prevLightBox)
-		index && setImageIndex(index)
-	}
-
-	const onPreviousImage = () => {
-		setImageIndex(prevIndex => prevIndex >= 1 ? prevIndex - 1 : images.length - 1)
-	}
-
-	const onNextImage = () => {
-		setImageIndex(prevIndex => prevIndex + 1 !== images.length ? prevIndex + 1 : 0)
+	const [options, setOptions] = useState(false)
+	const onToggleOptions = () => {
+		setOptions(prevOptions =>  !prevOptions)
 	}
 
 	return (
@@ -256,35 +237,11 @@ const Gallery = () => {
 			{	/* Display all images */
 				loading 
 					? <Loader />
-					: <div className="images">
-						{
-							lightBox
-								? <figure className="lightbox">
-									<div className="close" onClick={() => onToggleLightBox()} >
-										<div className="line1"></div>
-										<div className="line2"></div>
-									</div>
-									
-									<img src={images[imageIndex].url} alt={images[imageIndex].name}/>
-									
-									<div className="row">
-										<div className="previous" onClick={() => onPreviousImage()}>
-											<div className="arrow left"></div>
-										</div>
-											
-										<div className="next" onClick={() => onNextImage()}>
-											<div className="arrow right"></div>
-										</div>
-									</div>
-								</figure> 
-								: images.map((image, index) => (
-									<figure key={image.url} >
-										<div className={`select-icon ${ selected.includes(image) && 'selected' }`} onClick={() => onSelect(image)}><div></div></div>
-										<img src={image.url} alt={image.name} onClick={() => onToggleLightBox(index)} />
-									</figure>
-								))
-						}
-					</div>
+					: <Images 
+						images={images} 
+						selected={selected}
+						setSelected={(value) => setSelected(value)}
+					/>
 			}
 		</div>
 	)

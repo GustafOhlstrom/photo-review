@@ -1,7 +1,6 @@
 @import '../../variables.scss';
 
 #home {
-	width: 50%;
 	max-width: 800px;
 	margin: auto;
 	padding: 1.5rem;
@@ -12,15 +11,28 @@
 	}
 
 	.auth-options {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		
 		a {
-			width: 45%;
+			width: 100%;
 
 			button {
 				width: 100%;
+				margin-bottom: 1rem;
+			}
+		}
+	}
+
+	@media screen and (min-width: 768px) {
+		.auth-options {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			
+			a {
+				width: 45%;
+	
+				button {
+					width: 100%;
+				}
 			}
 		}
 	}
